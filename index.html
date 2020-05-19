@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pomodoro Timer</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <header>
+            <div>
+                <h1>Web Development 101</h1>
+            </div>
+        </header>
+
+        <main>
+            <div>
+                <h2>Pomodoro Timer</h2>
+            </div>
+
+            <div id="displayGrid">
+                <p id="workClock" class="display"></p>
+                <p id="breakClock" class="display"></p>
+                <p id="checkCount" class="display"></p>
+                <div>
+                    <button id="playPause"></button>
+                </div>
+            </div>
+
+            <form action="">
+                <div id="formGrid">
+                    <input type="number" id="work">
+                    <input type="number" id="sbreak">
+                    <input type="number" id="checks">
+                    <input type="number" id="lbreak">
+                    
+                    
+                    <label for="work">Work</label>
+                    <label for="sbreak">Short break</label>
+                    <label for="checks">Checks</label>
+                    <label for="lbreak">Long break</label>                    
+                </div>
+                <div>
+                    <button id="newClock" type="button">New clock</button>
+                </div>
+            </form>
+        </main>
+
+        <footer>
+            <div>
+                <p>The Odin Project</p>
+            </div>
+        </footer>
+
+    </body>
+    
+    <script src="script.js"></script>
+</html>
