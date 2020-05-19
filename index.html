@@ -14,13 +14,13 @@
 
         <main>
             <div>
-                <h2>Pomodoro Timer</h2>
+                <h2>Pomodoro Clock</h2>
             </div>
 
             <div id="displayGrid">
-                <p id="workClock" class="display"></p>
-                <p id="breakClock" class="display"></p>
-                <p id="checkCount" class="display"></p>
+                <span id="sessionClock" class="display"></span>
+                <span id="breakClock" class="display"></span>
+                <span id="checkCount" class="display"></span>
                 <div>
                     <button id="playPause"></button>
                 </div>
@@ -28,13 +28,13 @@
 
             <form action="">
                 <div id="formGrid">
-                    <input type="number" id="work">
+                    <input type="number" id="session">
                     <input type="number" id="sbreak">
                     <input type="number" id="checks">
                     <input type="number" id="lbreak">
                     
                     
-                    <label for="work">Work</label>
+                    <label for="session">Session</label>
                     <label for="sbreak">Short break</label>
                     <label for="checks">Checks</label>
                     <label for="lbreak">Long break</label>                    

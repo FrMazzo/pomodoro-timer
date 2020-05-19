@@ -1,38 +1,37 @@
 //Asigns inputs
-const workInput = document.querySelector("#work");
+const sessionInput = document.querySelector("#session");
 const sbreakInput = document.querySelector("#sbreak");
 const checkInput = document.querySelector("#checks");
 const lbreakInput = document.querySelector("#lbreak");
 //Sets initial values
-workInput.value = 3;
+sessionInput.value = 3;
 sbreakInput.value = 1;
 lbreakInput.value = 4;
 checkInput.value = 4;
 
-//Asign displays
-const workDisplay = document.querySelector("#workClock");
+//Asigns displays
+const sessionDisplay = document.querySelector("#sessionClock");
 const breakDisplay = document.querySelector("#breakClock");
 const checkDisplay = document.querySelector("#checkCount");
 
-// all values in seconds
-let settedWorkTime;
+//all values in seconds
+let settedSessionTime;
 let settedShortBreakTime;
 let settedLongBreakTime;
 let settedCheckLimit;
 
 //values modified by function
-let workTime;
+let sessionTime;
 let breakTime;
 let checks;
 
 //switch between clocks
-let w;
-let b = false;
+let session;
 //controls clock
 let play;
 
 
-//Adds play/pause functionality
+//Play/pause functionality
 const playButton = document.querySelector("#playPause");
     playButton.addEventListener("click", e => playPause());
 
@@ -47,19 +46,21 @@ const newClock = document.querySelector("#newClock");
 //Sets values
 function setup(){
     play = false;
-    w = true;
+    session = true;
     
-    settedWorkTime = workInput.value * 60;
+    settedSessionTime = sessionInput.value * 60;
     settedShortBreakTime = sbreakInput.value * 60;
     settedLongBreakTime = lbreakInput.value * 60;
     settedCheckLimit = Number(checkInput.value);
     
-    workDisplay.textContent = formatTime(settedWorkTime);
+    sessionDisplay.textContent = formatTime(settedSessionTime);
+    sessionDisplay.classList.add("running");
     breakDisplay.textContent = formatTime(settedShortBreakTime);
+    breakDisplay.classList.remove("running");
     checkDisplay.innerHTML = "";
     playButton.innerHTML = "&#9658;";
     
-    workTime = settedWorkTime;
+    sessionTime = settedSessionTime;
     breakTime = settedShortBreakTime;
     checks = 0;
 
@@ -87,37 +88,47 @@ function formatTime(n){
     return `${min}:${sec}`;
 }
 
-//Display checks, checks length to display short version
+//Display checks, if checks > 4 displays short version
 function displayChecks(){
     checkDisplay.innerHTML = checks > 4 ? checks + "&check;" : "&check;".repeat(checks);
     return;
 }
 
+//Swaps running class, plays sound
+function swapRunning(){
+    sessionDisplay.classList.toggle("running");
+    breakDisplay.classList.toggle("running");
+
+    let notification = new Notification("A");
+    return;
+}
 
 //Clock, always running. It only runs down the clock if both play and w or b are true
 const countDown = setInterval(()=>{
 
     if(!play) return;
 
-    if (w){
-        workTime--;
+    if (session){
+        sessionTime--;
         
-        if (workTime === 0){
-            w = false;
-            workTime = settedWorkTime;
+        if (sessionTime === 0){
+            session = false;
+            sessionTime = settedSessionTime;
 
             checks++;
 
             displayChecks();
+
+            swapRunning();
         }
 
-        workDisplay.textContent = formatTime(workTime);
+        sessionDisplay.textContent = formatTime(sessionTime);
 
     } else {
         breakTime--;
         
         if (breakTime === 0){
-            w = true;
+            session = true;
 
             if (checks === settedCheckLimit - 1){
                 breakTime = settedLongBreakTime;
@@ -129,14 +140,15 @@ const countDown = setInterval(()=>{
                 checks = 0;
                 displayChecks();
             }
+
+            swapRunning();    
         }
         
         breakDisplay.textContent = formatTime(breakTime);
     }
     
-    
-
     return;
-},20);
+
+}, 20);
 
 setup();

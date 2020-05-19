@@ -11,7 +11,7 @@ h2 {
     font-size: 2em;
 }
 
-#displayGrid .display{
+.display{
     margin: 0;
     height: 50px;
     box-shadow: 0 0.2em 0.1em -5px #00000033;
@@ -20,7 +20,7 @@ h2 {
 
 #displayGrid {
     margin: auto;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
     display: grid;
     width: 320px;
     grid-column-gap: 20px;
@@ -33,7 +33,7 @@ h2 {
     font-size: 2.5em;
 }
 
-#workClock, #breakClock {
+#sessionClock, #breakClock {
     font-size: 3em;
 }
 
@@ -44,7 +44,10 @@ h2 {
     padding-bottom: 8px;
 }
 
-
+.running {
+    color: rgb(255, 60, 0);
+    box-shadow: 0 0.2em 0.1em #00000033;
+}
 
 
 
@@ -85,12 +88,15 @@ button:hover{
 
 button:active{
     transform: scale(1.05);
-    box-shadow: 0 0.2em 0.3em #00000055;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0.3em 0.2em 0px #00000055;
 }
 
 #formGrid input:focus {
     outline: none;
     border: 1px solid rgb(255, 60, 0);
     box-shadow: 0 0.3em 0.2em -3px #00000055;
-
 }
