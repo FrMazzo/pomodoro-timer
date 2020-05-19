@@ -149,6 +149,6 @@ const countDown = setInterval(()=>{
     
     return;
 
-}, 20);
+}, 1000);
 
 setup();
