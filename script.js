@@ -1,122 +1,142 @@
+//Asigns inputs
+const workInput = document.querySelector("#work");
+const sbreakInput = document.querySelector("#sbreak");
+const checkInput = document.querySelector("#checks");
+const lbreakInput = document.querySelector("#lbreak");
+//Sets initial values
+workInput.value = 3;
+sbreakInput.value = 1;
+lbreakInput.value = 4;
+checkInput.value = 4;
+
+//Asign displays
+const workDisplay = document.querySelector("#workClock");
+const breakDisplay = document.querySelector("#breakClock");
+const checkDisplay = document.querySelector("#checkCount");
+
 // all values in seconds
-let settedWorkTime = 1500;
-let settedShortBreakTime = 300;
-let settedLongBreakTime = 1200;
-let settedCheckLimit = 4;
+let settedWorkTime;
+let settedShortBreakTime;
+let settedLongBreakTime;
+let settedCheckLimit;
 
 //values modified by function
-let workTime = settedWorkTime;
-let breakTime = settedShortBreakTime;
-let checks = 0;
+let workTime;
+let breakTime;
+let checks;
 
 //switch between clocks
-let w = true;
+let w;
 let b = false;
 //controls clock
-let play = false;
-
-
-//Display initial values
-const workDisplay = document.querySelector("#workClock");
-    workDisplay.textContent = format(settedWorkTime);
-
-const breakDisplay = document.querySelector("#breakClock");
-    breakDisplay.textContent = format(settedShortBreakTime);
-
-const checkDisplay = document.querySelector("#checkCount");
+let play;
 
 
 //Adds play/pause functionality
 const playButton = document.querySelector("#playPause");
-    playButton.innerHTML = "&#9658;";
-    playButton.addEventListener("click", e => {
-        play = !play;
-        if (play) {
-            playButton.innerHTML = "&#9208;";
-        } else {
-            playButton.innerHTML = "&#9658;";
-        }
-    });
-
-//Shows starting values
-const workInput = document.querySelector("#work");
-    workInput.value = settedWorkTime/60;
-
-const sbreakInput = document.querySelector("#sbreak");
-    sbreakInput.value = settedShortBreakTime/60;
-
-const checkInput = document.querySelector("#checks");
-    checkInput.value = settedCheckLimit;
-
-const lbreakInput = document.querySelector("#lbreak");
-    lbreakInput.value = settedLongBreakTime/60;
+    playButton.addEventListener("click", e => playPause());
 
 //Sets new custom timer
 const newClock = document.querySelector("#newClock");
-    newClock.addEventListener("click", e => {
-        play = false;
-        
-        settedWorkTime = workInput.value * 60;
-        settedShortBreakTime = sbreakInput.value * 60;
-        settedLongBreakTime = lbreakInput.value * 60;
-        settedCheckLimit = checkInput.value;
-        
-        workDisplay.textContent = format(settedWorkTime);
-        breakDisplay.textContent = format(settedShortBreakTime);
-        checkDisplay.innerHTML = "";
-        
-        workTime = settedWorkTime;
-        breakTime = settedShortBreakTime;
-        checks = 0;
-    });
+    newClock.addEventListener("click", e => setup());
+
+
+
+//Functions
+
+//Sets values
+function setup(){
+    play = false;
+    w = true;
+    
+    settedWorkTime = workInput.value * 60;
+    settedShortBreakTime = sbreakInput.value * 60;
+    settedLongBreakTime = lbreakInput.value * 60;
+    settedCheckLimit = Number(checkInput.value);
+    
+    workDisplay.textContent = formatTime(settedWorkTime);
+    breakDisplay.textContent = formatTime(settedShortBreakTime);
+    checkDisplay.innerHTML = "";
+    playButton.innerHTML = "&#9658;";
+    
+    workTime = settedWorkTime;
+    breakTime = settedShortBreakTime;
+    checks = 0;
+
+    return;
+}
+
+//Play/Pause
+function playPause(){
+    play = !play;
+
+    if (play) {
+        playButton.innerHTML = "&#9208;";
+    } else {
+        playButton.innerHTML = "&#9658;";
+    }
+
+    return;
+}
 
 //Formats seconds into "00:00"
-function format(n){
+function formatTime(n){
     let min = String(Math.floor(n/60)).padStart(2, "0");
     let sec = String(n%60).padStart(2, "0");
 
     return `${min}:${sec}`;
 }
 
+//Display checks, checks length to display short version
+function displayChecks(){
+    checkDisplay.innerHTML = checks > 4 ? checks + "&check;" : "&check;".repeat(checks);
+    return;
+}
+
 
 //Clock, always running. It only runs down the clock if both play and w or b are true
 const countDown = setInterval(()=>{
 
-    if (w && play){
-        workTime--;
-        workDisplay.textContent = format(workTime);
+    if(!play) return;
 
+    if (w){
+        workTime--;
+        
         if (workTime === 0){
             w = false;
-            b = true;
+            workTime = settedWorkTime;
+
             checks++;
-            console.log("pomo");
 
+            displayChecks();
+        }
 
-            if (checks === settedCheckLimit){
+        workDisplay.textContent = formatTime(workTime);
+
+    } else {
+        breakTime--;
+        
+        if (breakTime === 0){
+            w = true;
+
+            if (checks === settedCheckLimit - 1){
                 breakTime = settedLongBreakTime;
             } else {
                 breakTime = settedShortBreakTime;
             }
-        }
 
-    } else if (b && play) {
-        breakTime--;
-        breakDisplay.textContent = format(breakTime);
-
-        if (breakTime === 0){
-            b = false;
-            w = true;
-
-
-            workTime = settedWorkTime;
-            if (checks === settedCheckLimit){
+            if (checks === settedCheckLimit) {
                 checks = 0;
+                displayChecks();
             }
         }
-
+        
+        breakDisplay.textContent = formatTime(breakTime);
     }
     
-    checkDisplay.innerHTML = checks > 4 ? checks + "&check;" : "&check;".repeat(checks);
+    
 
-},1000);
+    return;
+},20);
+
+setup();
